@@ -63,3 +63,6 @@ monodroid*.msi
 *.VC.opendb
 
 artifacts/
+
+gdd.md
+player_plan.md
