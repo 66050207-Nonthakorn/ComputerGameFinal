@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace ComputerGameFinal.Engine;
 
-public abstract class GameObject
+public class GameObject
 {
     public Vector2 Position { get; set; } = Vector2.Zero;
     public float Rotation { get; set; } = 0f;
@@ -17,8 +17,8 @@ public abstract class GameObject
 
     private readonly List<Component> _components = [];
 
-    public abstract void Initialize();
-    public abstract void Update(GameTime gameTime);
+    public virtual void Initialize() { }
+    public virtual void Update(GameTime gameTime) { }
 
     public T AddComponent<T>() where T : Component, new()
     {
