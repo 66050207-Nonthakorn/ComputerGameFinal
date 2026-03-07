@@ -45,8 +45,19 @@ public class Game1 : Microsoft.Xna.Framework.Game
     {
         GraphicsDevice.Clear(Color.White);
         
-        _spriteBatch.Begin(SpriteSortMode.FrontToBack);
-        SceneManager.Instance.CurrentScene.Draw(_spriteBatch);
+        var currentScene = SceneManager.Instance.CurrentScene;
+        Matrix cameraTransform = currentScene?.GetCameraTransform() ?? Matrix.Identity;
+        
+        _spriteBatch.Begin(
+            SpriteSortMode.FrontToBack,
+            BlendState.AlphaBlend,
+            SamplerState.PointClamp,
+            DepthStencilState.None,
+            RasterizerState.CullCounterClockwise,
+            null,
+            cameraTransform
+        );
+        currentScene?.Draw(_spriteBatch);
         _spriteBatch.End();
 
         base.Draw(gameTime);

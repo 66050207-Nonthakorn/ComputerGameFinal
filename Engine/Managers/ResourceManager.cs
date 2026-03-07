@@ -52,7 +52,6 @@ public class ResourceManager
         {
             // assetName is relative to content.RootDirectory — used for content.Load<T>()
             string relative  = Path.GetRelativePath(content.RootDirectory, filePath).Replace('\\', '/');
-            string assetName = Path.ChangeExtension(relative, null);
 
             // key = path after the last "/Content/" segment, e.g.
             //   "bin/DesktopGL/Content/Sprites/player" → "Sprites/player"
@@ -61,13 +60,15 @@ public class ResourceManager
             string keyPath = contentIdx >= 0
                 ? relative[(contentIdx + "Content/".Length)..]
                 : relative;
-            string key = Path.ChangeExtension(keyPath, null);
+            string assetName = Path.ChangeExtension(keyPath, null);
+
+            Console.WriteLine($"[ResourceManager] Loading asset: '{assetName}'");
 
             // Try each supported type in turn; skip on mismatch
-            if (TryLoad<Texture2D>(content, key, out var tex))       { _textures[key] = tex; continue; }
-            if (TryLoad<SpriteFont>(content, key, out var font))     { _fonts[key]    = font; continue; }
-            if (TryLoad<SoundEffect>(content, key, out var sfx))     { _sounds[key]   = sfx; continue; }
-            if (TryLoad<Song>(content, key, out var song))           { _songs[key]    = song; continue; }
+            if (TryLoad<Texture2D>(content, assetName, out var tex))       { _textures[assetName] = tex; continue; }
+            if (TryLoad<SpriteFont>(content, assetName, out var font))     { _fonts[assetName]    = font; continue; }
+            if (TryLoad<SoundEffect>(content, assetName, out var sfx))     { _sounds[assetName]   = sfx; continue; }
+            if (TryLoad<Song>(content, assetName, out var song))           { _songs[assetName]    = song; continue; }
 
             Console.WriteLine($"[ResourceManager] Unknown asset type, skipped: '{assetName}'");
         }

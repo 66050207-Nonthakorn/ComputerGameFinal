@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using System.Windows.Markup;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ComputerGameFinal.Engine.Components;
 
 namespace ComputerGameFinal.Engine;
 
@@ -9,14 +9,12 @@ public abstract class Scene
 {
     protected Dictionary<string, GameObject> GameObjects { get; } = [];
     private readonly List<string> _deadObjects = [];
+    
+    public Camera2D Camera { get; set; }
 
     // For add game objects
     public abstract void Setup();
     
-    // After Init Component
-    public abstract void Initialize();
-
-
     public void Load()
     {
         this.Setup();
@@ -30,8 +28,6 @@ public abstract class Scene
         {
             gameObject.Initialize();
         }
-
-        this.Initialize();
     }
 
     public void Unload()
@@ -56,6 +52,8 @@ public abstract class Scene
             GameObjects.Remove(name);
         }
 
+        // Physics and collision handling update
+
         _deadObjects.Clear();
     }
 
@@ -65,6 +63,11 @@ public abstract class Scene
         {
             gameObject.DrawComponents(spriteBatch);
         }
+    }
+    
+    public Matrix GetCameraTransform()
+    {
+        return Camera?.TransformMatrix ?? Matrix.Identity;
     }
 
     public T AddGameObject<T>(string name) where T : GameObject, new() 
